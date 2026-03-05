@@ -1,5 +1,7 @@
 # FileTree Explorer
 
+> **Live demo:** https://andro2ss.github.io/FileTreeExplorer/
+
 Wewnętrzne narzędzie developerskie do wizualizacji struktury katalogów z pliku JSON.
 
 ## Uruchomienie
