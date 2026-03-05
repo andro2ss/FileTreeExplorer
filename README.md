@@ -21,8 +21,8 @@ npm run lint    # ESLint check
 ## Features
 
 - Paste or upload a JSON file representing a directory structure
-- **Insert example** button — fills the textarea with a comprehensive sample tree
-- **Windows Explorer–style Details view** — address bar breadcrumbs, sortable table (name / type / size), status bar with item count and total size
+- Insert example button — fills the textarea with a comprehensive sample tree
+- Windows Explorer–style Details view
 - Click any folder row to navigate into it; click any file row to see its details
 - Expandable/collapsible tree in the sidebar
 - Full-tree search with results surviving page refresh (via URL `?q=`)
@@ -39,9 +39,9 @@ Global state (the parsed JSON tree) lives in a Zustand store persisted to `sessi
 
 ### Search persistence — URL query params
 
-The search query is stored in `?q=` so it survives page refresh and can be bookmarked/shared. `useSearchParams` from React Router drives both reading and writing.
+The search query is stored in `?q=` so it survives page refresh. `useSearchParams` from React Router drives both reading and writing.
 
-### Routing — React Router v7 nested routes with splat
+### Routing — React Router v6 nested routes with splat
 
 `/tree` is a layout route (sidebar + `<Outlet />`). `/tree/*` is a splat route that passes the full path to `ExplorerPage`, which resolves the node via `findNode` and renders `ExplorerPane`. A guard in `TreePage` redirects to `/` if no tree is loaded. After a successful JSON submit the app immediately navigates to `/tree/<rootName>` so the root is always shown by default.
 
