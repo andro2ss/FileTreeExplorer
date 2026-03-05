@@ -1,100 +1,102 @@
 # FileTree Explorer
 
-An internal developer tool for visualising directory structures from JSON input.
+Wewnętrzne narzędzie developerskie do wizualizacji struktury katalogów z pliku JSON.
 
-## Quick start
+## Uruchomienie
 
 ```bash
 npm install && npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+Otwórz [http://localhost:5173](http://localhost:5173).
 
 ```bash
-npm test        # run unit + component tests (39 tests)
-npm run build   # production build
-npm run lint    # ESLint check
+npm test        # testy jednostkowe i komponentowe (39 testów)
+npm run build   # produkcyjny build
+npm run lint    # sprawdzenie ESLint
 ```
 
 ---
 
-## Features
+## Funkcjonalności
 
-- Paste or upload a JSON file representing a directory structure
-- Insert example button — fills the textarea with a comprehensive sample tree
-- Windows Explorer–style Details view
-- Click any folder row to navigate into it; click any file row to see its details
-- Expandable/collapsible tree in the sidebar
-- Full-tree search with results surviving page refresh (via URL `?q=`)
-- Polish / English language switcher — error messages and all UI strings update instantly
-- Responsive layout — on mobile the sidebar is replaced by a compact top bar with search, language switcher and reset
+- Wklejenie lub wgranie pliku JSON reprezentującego strukturę katalogów
+- Przycisk „Wstaw przykład" — wypełnia textarea wyczerpującym przykładem obsługiwanego formatu
+- Widok szczegółów w stylu Eksploratora Windows — pasek adresu (breadcrumbs), tabela z nazwą / typem / rozmiarem, pasek statusu z liczbą elementów i łącznym rozmiarem
+- Kliknięcie wiersza folderu wchodzi do niego; kliknięcie pliku pokazuje jego szczegóły
+- Rozwijane/zwijane drzewo w panelu bocznym
+- Wyszukiwanie po całym drzewie z zachowaniem zapytania po odświeżeniu strony (URL `?q=`)
+- Przełącznik języka PL/EN — komunikaty błędów i cały interfejs aktualizują się natychmiast
+- Responsywny layout — na mobile panel boczny jest ukryty, zamiast niego pojawia się górny pasek z wyszukiwarką, przełącznikiem języka i resetem
 
 ---
 
-## Architectural decisions
+## Decyzje architektoniczne
 
-### State management — Zustand + sessionStorage
+### Zarządzanie stanem — Zustand + sessionStorage
 
-Global state (the parsed JSON tree) lives in a Zustand store persisted to `sessionStorage`. This means the tree survives navigation between routes but is cleared when the browser tab is closed — an appropriate trade-off for an internal developer tool where stale data is undesirable.
+Globalny stan (sparsowane drzewo JSON) przechowywany jest w storze Zustand z persistencją do `sessionStorage`. Drzewo przeżywa nawigację między trasami, ale jest kasowane po zamknięciu karty — odpowiedni kompromis dla narzędzia wewnętrznego, gdzie nieaktualne dane są niepożądane.
 
-### Search persistence — URL query params
+### Persystencja wyszukiwania — parametry URL
 
-The search query is stored in `?q=` so it survives page refresh. `useSearchParams` from React Router drives both reading and writing.
+Zapytanie wyszukiwania zapisywane jest w `?q=`, dzięki czemu przeżywa odświeżenie strony. `useSearchParams` z React Router odpowiada za odczyt i zapis.
 
-### Routing — React Router v6 nested routes with splat
+### Routing — React Router v6, zagnieżdżone trasy ze splatem
 
-`/tree` is a layout route (sidebar + `<Outlet />`). `/tree/*` is a splat route that passes the full path to `ExplorerPage`, which resolves the node via `findNode` and renders `ExplorerPane`. A guard in `TreePage` redirects to `/` if no tree is loaded. After a successful JSON submit the app immediately navigates to `/tree/<rootName>` so the root is always shown by default.
+`/tree` to trasa-layout (sidebar + `<Outlet />`). `/tree/*` to trasa splat przekazująca pełną ścieżkę do `ExplorerPage`, która rozwiązuje węzeł przez `findNode` i renderuje `ExplorerPane`. Guard w `TreePage` przekierowuje do `/` gdy brak drzewa w storze. Po poprawnym załadowaniu JSON aplikacja od razu nawiguje do `/tree/<root>`, żeby root był zawsze domyślnie widoczny.
 
-### Explorer view — ExplorerPane organism
+### Widok eksploratora — organism ExplorerPane
 
-`ExplorerPane` receives a resolved `TreeNode` and its `pathSegments`. For folders it renders an address bar (clickable breadcrumbs), a details table with each child's name, type badge and subtree size, and a status bar. For files it renders a centred card with metadata. Navigation between nodes is handled via `useNavigate`.
+`ExplorerPane` otrzymuje rozwiązany `TreeNode` i jego `pathSegments`. Dla folderów renderuje pasek adresu z klikalnym breadcrumbem, tabelę dzieci (nazwa, badge typu, rozmiar poddrzewa) i pasek statusu. Dla plików renderuje wycentrowaną kartę z metadanymi. Nawigacja między węzłami odbywa się przez `useNavigate`.
 
-### i18n reactivity fix
+### Reaktywność i18n
 
-All error states store the i18n **key** rather than the already-translated string. This means React re-evaluates `t(errorKey)` on every render, so switching the language updates the visible error text without any additional logic.
+Stany błędów przechowują **klucz** i18n zamiast przetłumaczonego stringa. Dzięki temu React przelicza `t(errorKey)` przy każdym renderze — zmiana języka aktualizuje widoczny komunikat bez żadnej dodatkowej logiki.
 
-### Project structure — Atomic Design
+### Struktura projektu — Atomic Design
 
 ```
 atoms/       — Button, TextArea, SearchInput, Chevron, TreeIcons, LanguageSwitcher
 molecules/   — TreeNodeRow, JsonPasteInput, JsonFileUpload, SearchResultItem
 organisms/   — TreeView, JsonInputForm, SearchPanel, ExplorerPane
-templates/   — TreeLayout (sidebar + mobile top bar + <Outlet />)
+templates/   — TreeLayout (sidebar + mobilny top bar + <Outlet />)
 pages/       — HomePage, TreePage, ExplorerPage
 ```
 
-### TypeScript — discriminated unions
+### TypeScript — unie dyskryminowane
 
-`TreeNode = FileNode | FolderNode` — the `type` field acts as a discriminant, making exhaustive checks straightforward without needing `any` or assertions.
+`TreeNode = FileNode | FolderNode` — pole `type` pełni rolę dyskryminantu, co pozwala na wyczerpujące sprawdzenia bez użycia `any` ani asercji.
 
 ---
 
-## Testing
+## Testy
 
-Vitest + React Testing Library. Run with `npm test`.
+Vitest + React Testing Library. Uruchomienie: `npm test`.
 
-| File | Tests | Coverage |
+| Plik | Testy | Zakres |
 |---|---|---|
-| `utils/formatSize.test.ts` | 4 | B / KB / MB formatting |
-| `utils/pathUtils.test.ts` | 6 | encode, decode, round-trip |
+| `utils/formatSize.test.ts` | 4 | formatowanie B / KB / MB |
+| `utils/pathUtils.test.ts` | 6 | encode, decode, round-trip ze znakami specjalnymi |
 | `utils/treeUtils.test.ts` | 21 | `isTreeNode`, `findNode`, `calcSubtreeSize`, `searchTree` |
-| `molecules/JsonPasteInput.test.tsx` | 8 | render, validation, submit, i18n reactivity |
+| `molecules/JsonPasteInput.test.tsx` | 8 | render, walidacja, submit, reaktywność i18n |
 
 ---
 
-## What would be done with more time
+## Co zostałoby zrobione przy większej ilości czasu
 
-- **Virtual scrolling** — for very large trees (e.g. `react-window`)
-- **Keyboard navigation** — arrow keys to traverse the tree
-- **Drag-and-drop JSON** — drop a file anywhere on the page
-- **Persist expand/collapse state** — tree collapses on refresh; could be stored in `sessionStorage`
-- **Column sorting** — click table headers in the Details view to sort by name / size / type
+- **Testy E2E (Playwright)** — scenariusze end-to-end: wklejenie JSON → nawigacja do folderu → wyszukiwanie → przełączenie języka; weryfikacja całego flow w prawdziwej przeglądarce niezależnie od implementacji komponentów
+- **Wirtualny scrolling** — dla bardzo dużych drzew (np. `react-window`)
+- **Nawigacja klawiaturą** — strzałki do poruszania się po drzewie
+- **Drag-and-drop JSON** — upuszczenie pliku w dowolnym miejscu strony
+- **Persystencja stanu rozwinięcia** — drzewo zwija się po odświeżeniu; można by zapisywać stan w `sessionStorage`
+- **Sortowanie kolumn** — kliknięcie nagłówka tabeli w widoku szczegółów sortuje po nazwie / rozmiarze / typie
 
 ---
 
-## Known limitations
+## Znane ograniczenia
 
-- Folder or file names containing `/` would break URL-based navigation (the path separator is `/`)
-- No pagination for search results — very large trees with broad queries can produce a long list
-- `sessionStorage` is cleared when the tab is closed — the user must re-upload the JSON on each session
+- Nazwy plików i folderów zawierające `/` psują nawigację opartą na URL (separator ścieżki to `/`)
+- Brak paginacji wyników wyszukiwania — bardzo duże drzewa z szerokim zapytaniem mogą zwrócić długą listę
+- `sessionStorage` jest czyszczony po zamknięciu karty — użytkownik musi ponownie wgrać JSON przy każdej sesji
+
 
