@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { Chevron } from '../atoms/Chevron'
 import { FileIcon, FolderIcon, FolderOpenIcon } from '../atoms/TreeIcons'
@@ -16,74 +16,111 @@ type Props = {
 export function TreeNodeRow({ node, depth, expanded = false, onToggle, pathSegments }: Props) {
   const encodedPath = encodePath(pathSegments)
   const isFolder = node.type === 'folder'
+  const match = useMatch(`/tree/${encodedPath}`)
+  const isActive = !!match
 
   return (
-    <Row depth={depth}>
+    <Row $depth={depth}>
       {isFolder ? (
         <ToggleButton
           onClick={onToggle}
           aria-expanded={expanded}
           aria-label={node.name}
           type="button"
+          $isActive={isActive}
         >
-          <Chevron expanded={expanded} />
+          <ChevronWrap>
+            <Chevron expanded={expanded} />
+          </ChevronWrap>
           {expanded ? (
-            <FolderOpenIcon sx={{ fontSize: 18 }} color="primary" />
+            <FolderOpenIcon sx={{ fontSize: 15, color: '#fbbf24', flexShrink: 0 }} />
           ) : (
-            <FolderIcon sx={{ fontSize: 18 }} color="primary" />
+            <FolderIcon sx={{ fontSize: 15, color: '#f59e0b', flexShrink: 0 }} />
           )}
-          <NodeLink to={`/tree/${encodedPath}`}>{node.name}</NodeLink>
+          <NodeLink
+            to={`/tree/${encodedPath}`}
+            $isActive={isActive}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {node.name}
+          </NodeLink>
         </ToggleButton>
       ) : (
-        <FileRow>
-          <Spacer />
-          <FileIcon sx={{ fontSize: 18 }} color="action" />
-          <NodeLink to={`/tree/${encodedPath}`}>{node.name}</NodeLink>
+        <FileRow $isActive={isActive}>
+          <FileSpacer />
+          <FileIcon sx={{ fontSize: 15, color: '#94a3b8', flexShrink: 0 }} />
+          <NodeLink to={`/tree/${encodedPath}`} $isActive={isActive}>
+            {node.name}
+          </NodeLink>
         </FileRow>
       )}
     </Row>
   )
 }
 
-const Row = styled.div<{ depth: number }>`
-  padding-left: ${({ depth }) => depth * 16}px;
+const Row = styled.div<{ $depth: number }>`
+  padding-left: ${({ $depth }) => $depth * 12}px;
 `
 
-const ToggleButton = styled.button`
+const ToggleButton = styled.button<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: none;
+  gap: 5px;
+  background: ${({ $isActive }) => ($isActive ? 'rgba(99, 102, 241, 0.18)' : 'transparent')};
   border: none;
+  border-left: 2px solid ${({ $isActive }) => ($isActive ? '#6366f1' : 'transparent')};
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 5px 10px 5px 8px;
   width: 100%;
   text-align: left;
+  transition: background 0.12s;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.04);
+    background: ${({ $isActive }) =>
+      $isActive ? 'rgba(99, 102, 241, 0.24)' : 'rgba(255, 255, 255, 0.05)'};
   }
 `
 
-const FileRow = styled.div`
+const FileRow = styled.div<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
+  gap: 5px;
+  padding: 5px 10px 5px 10px;
+  border-left: 2px solid ${({ $isActive }) => ($isActive ? '#6366f1' : 'transparent')};
+  background: ${({ $isActive }) => ($isActive ? 'rgba(99, 102, 241, 0.18)' : 'transparent')};
+  transition: background 0.12s;
+
+  &:hover {
+    background: ${({ $isActive }) =>
+      $isActive ? 'rgba(99, 102, 241, 0.24)' : 'rgba(255, 255, 255, 0.05)'};
+  }
 `
 
-const Spacer = styled.span`
+const ChevronWrap = styled.span`
+  display: flex;
+  align-items: center;
+  color: #475569;
+  flex-shrink: 0;
+`
+
+const FileSpacer = styled.span`
   width: 16px;
   flex-shrink: 0;
 `
 
-const NodeLink = styled(Link)`
-  color: inherit;
+const NodeLink = styled(Link)<{ $isActive: boolean }>`
+  color: ${({ $isActive }) => ($isActive ? '#c7d2fe' : '#94a3b8')};
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: ${({ $isActive }) => ($isActive ? '500' : '400')};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+  transition: color 0.1s;
 
   &:hover {
-    text-decoration: underline;
+    color: #e2e8f0;
   }
 `

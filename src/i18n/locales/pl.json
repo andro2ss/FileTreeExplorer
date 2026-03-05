@@ -19,6 +19,7 @@
   "not_found": "Węzeł nie istnieje",
   "back_to_tree": "Wróć do drzewa",
   "load_new_tree": "Załaduj nowe drzewo",
+  "select_node": "Wybierz plik lub folder z drzewa, aby zobaczyć szczegóły",
   "home_title": "FileTree Explorer",
   "home_subtitle": "Wklej lub wgraj plik JSON reprezentujący strukturę katalogów"
 }
