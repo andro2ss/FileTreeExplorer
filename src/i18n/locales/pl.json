@@ -2,6 +2,7 @@
   "paste_label": "Wklej JSON",
   "upload_label": "Wgraj plik JSON",
   "submit": "Załaduj drzewo",
+  "load_example": "Wstaw przykład",
   "or": "lub",
   "invalid_json": "Nieprawidłowy format JSON",
   "invalid_json_structure": "JSON musi posiadać name, type i być plikiem lub folderem",
