@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { useTreeStore } from '../store/treeStore'
 import { TreeView } from '../organisms/TreeView'
 import { SearchPanel } from '../organisms/SearchPanel'
+import { LanguageSwitcher } from '../atoms/LanguageSwitcher'
 
 export default function TreeLayout() {
   const tree = useTreeStore((s) => s.tree)
@@ -21,9 +22,14 @@ export default function TreeLayout() {
     <Layout>
       <Sidebar>
         <SidebarHeader>
-          <BrandMark>🗂</BrandMark>
+          <BrandIcon aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinejoin="round" />
+            </svg>
+          </BrandIcon>
           <BrandName>FileTree</BrandName>
           <HeaderSpacer />
+          <LanguageSwitcher compact />
           <Tooltip title={t('load_new_tree')} placement="right">
             <NewButton onClick={handleLoadNew} type="button" aria-label={t('load_new_tree')}>
               ↺
@@ -68,9 +74,12 @@ const SidebarHeader = styled.div`
   flex-shrink: 0;
 `
 
-const BrandMark = styled.span`
-  font-size: 18px;
-  line-height: 1;
+const BrandIcon = styled.span`
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 `
 
 const BrandName = styled.span`

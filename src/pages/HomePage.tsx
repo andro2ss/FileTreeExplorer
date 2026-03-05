@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Box } from '@mui/material'
 import { JsonInputForm } from '../organisms/JsonInputForm'
+import { LanguageSwitcher } from '../atoms/LanguageSwitcher'
 
 export default function HomePage() {
   const { t } = useTranslation()
@@ -9,7 +10,18 @@ export default function HomePage() {
   return (
     <Page>
       <Hero>
-        <HeroLogo>🗂</HeroLogo>
+        <HeroTopBar>
+          <LanguageSwitcher />
+        </HeroTopBar>
+        <HeroLogo aria-hidden="true">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="28" width="64" height="44" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.35)" strokeWidth="2" />
+            <path d="M8 38a6 6 0 0 1 6-6h18l6 8h30a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6V38Z" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.5)" strokeWidth="2" />
+            <rect x="20" y="50" width="12" height="2" rx="1" fill="rgba(255,255,255,0.6)" />
+            <rect x="20" y="56" width="20" height="2" rx="1" fill="rgba(255,255,255,0.4)" />
+            <rect x="20" y="62" width="16" height="2" rx="1" fill="rgba(255,255,255,0.4)" />
+          </svg>
+        </HeroLogo>
         <HeroTitle>{t('home_title')}</HeroTitle>
         <HeroSubtitle>{t('home_subtitle')}</HeroSubtitle>
       </Hero>
@@ -27,15 +39,21 @@ const Page = styled.div`
 
 const Hero = styled.header`
   background: linear-gradient(160deg, #1e1b4b 0%, #3730a3 55%, #6366f1 100%);
-  padding: 56px 24px 72px;
+  padding: 24px 24px 72px;
   text-align: center;
 `
 
+const HeroTopBar = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32px;
+`
+
 const HeroLogo = styled.div`
-  font-size: 68px;
-  line-height: 1;
-  margin-bottom: 20px;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4));
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.35));
 `
 
 const HeroTitle = styled.h1`
