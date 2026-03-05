@@ -6,7 +6,11 @@ import { SearchResultItem } from '../molecules/SearchResultItem'
 import { searchTree } from '../utils/treeUtils'
 import { useTreeStore } from '../store/treeStore'
 
-export function SearchPanel() {
+type Props = {
+  variant?: 'sidebar' | 'topbar'
+}
+
+export function SearchPanel({ variant = 'sidebar' }: Props) {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const tree = useTreeStore((s) => s.tree)
@@ -20,10 +24,10 @@ export function SearchPanel() {
   const results = query && tree ? searchTree(tree, query) : []
 
   return (
-    <Panel>
+    <Panel $topbar={variant === 'topbar'}>
       <SearchInput value={query} onChange={handleChange} />
       {query && (
-        <Dropdown>
+        <Dropdown $topbar={variant === 'topbar'}>
           {results.length === 0 ? (
             <EmptyMsg>{t('search_no_results')}</EmptyMsg>
           ) : (
@@ -42,12 +46,14 @@ export function SearchPanel() {
   )
 }
 
-const Panel = styled.div`
-  padding: 10px;
+const Panel = styled.div<{ $topbar: boolean }>`
+  padding: ${({ $topbar }) => ($topbar ? '0' : '10px')};
   flex-shrink: 0;
+  flex: ${({ $topbar }) => ($topbar ? '1' : 'unset')};
+  position: relative;
 `
 
-const Dropdown = styled.div`
+const Dropdown = styled.div<{ $topbar: boolean }>`
   margin-top: 6px;
   background: #1e293b;
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -55,6 +61,8 @@ const Dropdown = styled.div`
   overflow: hidden;
   max-height: 260px;
   overflow-y: auto;
+  position: ${({ $topbar }) => ($topbar ? 'absolute' : 'relative')};
+  ${({ $topbar }) => $topbar && 'left: 0; right: 0; z-index: 200;'}
 `
 
 const CountRow = styled.div`

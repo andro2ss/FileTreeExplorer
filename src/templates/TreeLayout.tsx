@@ -7,6 +7,8 @@ import { TreeView } from '../organisms/TreeView'
 import { SearchPanel } from '../organisms/SearchPanel'
 import { LanguageSwitcher } from '../atoms/LanguageSwitcher'
 
+const MOBILE = '768px'
+
 export default function TreeLayout() {
   const tree = useTreeStore((s) => s.tree)
   const clearTree = useTreeStore((s) => s.clearTree)
@@ -20,6 +22,28 @@ export default function TreeLayout() {
 
   return (
     <Layout>
+      <MobileTopBar>
+        <MobileBrand>
+          <BrandIconSvg aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinejoin="round" />
+            </svg>
+          </BrandIconSvg>
+          <BrandName>FileTree</BrandName>
+        </MobileBrand>
+        <MobileSearchWrap>
+          <SearchPanel variant="topbar" />
+        </MobileSearchWrap>
+        <MobileActions>
+          <LanguageSwitcher compact />
+          <Tooltip title={t('load_new_tree')} placement="bottom">
+            <NewButton onClick={handleLoadNew} type="button" aria-label={t('load_new_tree')}>
+              ↺
+            </NewButton>
+          </Tooltip>
+        </MobileActions>
+      </MobileTopBar>
+
       <Sidebar>
         <SidebarHeader>
           <BrandIcon aria-hidden="true">
@@ -54,6 +78,54 @@ const Layout = styled.div`
   display: flex;
   height: 100%;
   overflow: hidden;
+
+  @media (max-width: ${MOBILE}) {
+    flex-direction: column;
+  }
+`
+
+const MobileTopBar = styled.header`
+  display: none;
+
+  @media (max-width: ${MOBILE}) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    min-height: 52px;
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 100;
+  }
+`
+
+const MobileBrand = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+`
+
+const BrandIconSvg = styled.span`
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+`
+
+const MobileSearchWrap = styled.div`
+  flex: 1;
+  min-width: 0;
+`
+
+const MobileActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 `
 
 const Sidebar = styled.aside`
@@ -63,6 +135,10 @@ const Sidebar = styled.aside`
   flex-direction: column;
   background: #0f172a;
   flex-shrink: 0;
+
+  @media (max-width: ${MOBILE}) {
+    display: none;
+  }
 `
 
 const SidebarHeader = styled.div`
@@ -125,4 +201,8 @@ const Main = styled.main`
   overflow-y: auto;
   padding: 40px;
   background: #f8fafc;
+
+  @media (max-width: ${MOBILE}) {
+    padding: 0;
+  }
 `
