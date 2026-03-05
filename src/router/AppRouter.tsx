@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
-import { CircularProgress, Box } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { CircularProgress, Box, Typography } from '@mui/material'
 
 const HomePage = lazy(() => import('../pages/HomePage'))
 const TreePage = lazy(() => import('../pages/TreePage'))
@@ -14,6 +15,21 @@ function Loader() {
   )
 }
 
+function TreeWelcome() {
+  const { t } = useTranslation()
+  return (
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="100%"
+      sx={{ color: 'text.secondary' }}
+    >
+      <Typography variant="body2">{t('select_node')}</Typography>
+    </Box>
+  )
+}
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -21,7 +37,7 @@ export default function AppRouter() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/tree" element={<TreePage />}>
-            <Route index element={<Box p={2} />} />
+            <Route index element={<TreeWelcome />} />
             <Route path=":nodePath" element={<NodeDetailsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

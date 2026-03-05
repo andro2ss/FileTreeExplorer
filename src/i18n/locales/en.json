@@ -19,6 +19,7 @@
   "not_found": "Node not found",
   "back_to_tree": "Back to tree",
   "load_new_tree": "Load new tree",
+  "select_node": "Select a file or folder from the tree to see details",
   "home_title": "FileTree Explorer",
   "home_subtitle": "Paste or upload a JSON file representing a directory structure"
 }

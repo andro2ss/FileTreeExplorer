@@ -11,6 +11,21 @@ export function SearchInput({ value, onChange }: Props) {
 
   return (
     <Wrapper>
+      <SearchIconWrap aria-hidden="true">
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+      </SearchIconWrap>
       <Input
         type="search"
         value={value}
@@ -33,18 +48,35 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
+const SearchIconWrap = styled.span`
+  position: absolute;
+  left: 10px;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+`
+
 const Input = styled.input`
   width: 100%;
-  padding: 8px 32px 8px 10px;
-  font-size: 13px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px 28px 8px 32px;
+  font-size: 12.5px;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  color: #e2e8f0;
   box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+
+  &::placeholder {
+    color: #475569;
+  }
 
   &:focus {
-    outline: none;
-    border-color: #1976d2;
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.1);
   }
 
   &::-webkit-search-cancel-button {
@@ -58,8 +90,12 @@ const ClearButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 12px;
-  color: #999;
+  font-size: 11px;
+  color: #475569;
   line-height: 1;
-  padding: 0;
+  padding: 2px 3px;
+
+  &:hover {
+    color: #94a3b8;
+  }
 `

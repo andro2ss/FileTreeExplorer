@@ -1,6 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Typography } from '@mui/material'
 import styled from 'styled-components'
 import { SearchInput } from '../atoms/SearchInput'
 import { SearchResultItem } from '../molecules/SearchResultItem'
@@ -24,16 +23,12 @@ export function SearchPanel() {
     <Panel>
       <SearchInput value={query} onChange={handleChange} />
       {query && (
-        <ResultsContainer>
+        <Dropdown>
           {results.length === 0 ? (
-            <Typography variant="caption" color="text.secondary" sx={{ px: 1.5, py: 1, display: 'block' }}>
-              {t('search_no_results')}
-            </Typography>
+            <EmptyMsg>{t('search_no_results')}</EmptyMsg>
           ) : (
             <>
-              <ResultsCount variant="caption">
-                {t('search_results_count', { count: results.length })}
-              </ResultsCount>
+              <CountRow>{t('search_results_count', { count: results.length })}</CountRow>
               <ResultsList>
                 {results.map(({ node, path }) => (
                   <SearchResultItem key={path} node={node} path={path} />
@@ -41,33 +36,43 @@ export function SearchPanel() {
               </ResultsList>
             </>
           )}
-        </ResultsContainer>
+        </Dropdown>
       )}
     </Panel>
   )
 }
 
 const Panel = styled.div`
-  padding: 8px 12px 0;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 10px;
+  flex-shrink: 0;
 `
 
-const ResultsContainer = styled.div`
-  margin-top: 8px;
-  max-height: 300px;
+const Dropdown = styled.div`
+  margin-top: 6px;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 260px;
   overflow-y: auto;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  background: #fff;
 `
 
-const ResultsCount = styled(Typography)`
-  display: block;
-  padding: 6px 12px 4px;
-  color: #888;
-` as typeof Typography
+const CountRow = styled.div`
+  font-size: 11px;
+  color: #475569;
+  padding: 6px 10px 4px;
+  letter-spacing: 0.01em;
+`
+
+const EmptyMsg = styled.div`
+  font-size: 12px;
+  color: #475569;
+  padding: 14px 10px;
+  text-align: center;
+`
 
 const ResultsList = styled.ul`
   margin: 0;
   padding: 0;
+  list-style: none;
 `
