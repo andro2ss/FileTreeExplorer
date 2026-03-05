@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { TreeNodeRow } from '../molecules/TreeNodeRow'
+import { useExpandedStore } from '../store/expandedStore'
 import type { TreeNode } from '../types/tree'
 
 type Props = {
@@ -9,13 +9,12 @@ type Props = {
 }
 
 export function TreeView({ node, depth = 0, parentSegments = [] }: Props) {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const expandedPaths = useExpandedStore((s) => s.expandedPaths)
+  const toggle = useExpandedStore((s) => s.toggle)
 
   const currentSegments = [...parentSegments, node.name]
-
-  function toggle() {
-    setIsExpanded((prev) => !prev)
-  }
+  const path = currentSegments.join('/')
+  const isExpanded = expandedPaths.includes(path)
 
   return (
     <div>
@@ -23,7 +22,7 @@ export function TreeView({ node, depth = 0, parentSegments = [] }: Props) {
         node={node}
         depth={depth}
         expanded={isExpanded}
-        onToggle={node.type === 'folder' ? toggle : undefined}
+        onToggle={node.type === 'folder' ? () => toggle(path) : undefined}
         pathSegments={currentSegments}
       />
       {node.type === 'folder' && isExpanded && (

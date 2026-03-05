@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Tooltip } from '@mui/material'
 import styled from 'styled-components'
 import { useTreeStore } from '../store/treeStore'
+import { useExpandedStore } from '../store/expandedStore'
 import { TreeView } from '../organisms/TreeView'
 import { SearchPanel } from '../organisms/SearchPanel'
 import { LanguageSwitcher } from '../atoms/LanguageSwitcher'
@@ -12,10 +13,12 @@ const MOBILE = '768px'
 export default function TreeLayout() {
   const tree = useTreeStore((s) => s.tree)
   const clearTree = useTreeStore((s) => s.clearTree)
+  const clearExpanded = useExpandedStore((s) => s.clear)
   const navigate = useNavigate()
   const { t } = useTranslation()
 
   function handleLoadNew() {
+    clearExpanded()
     clearTree()
     navigate('/')
   }

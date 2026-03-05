@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { JsonPasteInput } from '../molecules/JsonPasteInput'
 import { JsonFileUpload } from '../molecules/JsonFileUpload'
 import { useTreeStore } from '../store/treeStore'
+import { useExpandedStore } from '../store/expandedStore'
 import { useNavigate } from 'react-router-dom'
 import { encodePath } from '../utils/pathUtils'
 import type { TreeNode } from '../types/tree'
@@ -11,9 +12,11 @@ import type { TreeNode } from '../types/tree'
 export function JsonInputForm() {
   const { t } = useTranslation()
   const setTree = useTreeStore((s) => s.setTree)
+  const clearExpanded = useExpandedStore((s) => s.clear)
   const navigate = useNavigate()
 
   function handleTree(tree: TreeNode) {
+    clearExpanded()
     setTree(tree)
     navigate(`/tree/${encodePath([tree.name])}`)
   }

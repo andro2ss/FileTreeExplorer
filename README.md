@@ -88,7 +88,6 @@ Vitest + React Testing Library. Uruchomienie: `npm test`.
 - **Wirtualny scrolling** — dla bardzo dużych drzew (np. `react-window`)
 - **Nawigacja klawiaturą** — strzałki do poruszania się po drzewie
 - **Drag-and-drop JSON** — upuszczenie pliku w dowolnym miejscu strony
-- **Persystencja stanu rozwinięcia** — drzewo zwija się po odświeżeniu; można by zapisywać stan w `sessionStorage`
 - **Sortowanie kolumn** — kliknięcie nagłówka tabeli w widoku szczegółów sortuje po nazwie / rozmiarze / typie
 
 ---
