@@ -50,11 +50,11 @@ export function JsonFileUpload({ onSubmit }: Props) {
         onChange={handleFileChange}
       />
       <Button variant="outlined" onClick={() => inputRef.current?.click()}>
-        {fileName ?? t('upload_label')}
+        {t('upload_label')}
       </Button>
       {errorKey && (
         <Alert severity="error" sx={{ mt: 1 }}>
-          {t(errorKey)}
+          {fileName && <strong>{fileName}: </strong>}{t(errorKey)}
         </Alert>
       )}
     </div>
