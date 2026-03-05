@@ -21,5 +21,10 @@
   "load_new_tree": "Load new tree",
   "select_node": "Select a file or folder from the tree to see details",
   "home_title": "FileTree Explorer",
-  "home_subtitle": "Paste or upload a JSON file representing a directory structure"
+  "home_subtitle": "Paste or upload a JSON file representing a directory structure",
+  "explorer_type": "Type",
+  "explorer_type_file": "File",
+  "explorer_type_folder": "Folder",
+  "explorer_items_count": "{{count}} item(s)",
+  "explorer_empty_folder": "This folder is empty"
 }

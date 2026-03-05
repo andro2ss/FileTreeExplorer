@@ -21,5 +21,10 @@
   "load_new_tree": "Załaduj nowe drzewo",
   "select_node": "Wybierz plik lub folder z drzewa, aby zobaczyć szczegóły",
   "home_title": "FileTree Explorer",
-  "home_subtitle": "Wklej lub wgraj plik JSON reprezentujący strukturę katalogów"
+  "home_subtitle": "Wklej lub wgraj plik JSON reprezentujący strukturę katalogów",
+  "explorer_type": "Typ",
+  "explorer_type_file": "Plik",
+  "explorer_type_folder": "Folder",
+  "explorer_items_count": "{{count}} element(y)",
+  "explorer_empty_folder": "Ten folder jest pusty"
 }
