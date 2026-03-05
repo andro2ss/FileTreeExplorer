@@ -12,11 +12,11 @@ type Props = {
 export function JsonFileUpload({ onSubmit }: Props) {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [errorKey, setErrorKey] = useState<string | null>(null)
   const [fileName, setFileName] = useState<string | null>(null)
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setError(null)
+    setErrorKey(null)
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -26,12 +26,12 @@ export function JsonFileUpload({ onSubmit }: Props) {
       try {
         const parsed: unknown = JSON.parse(event.target?.result as string)
         if (!isTreeNode(parsed)) {
-          setError(t('invalid_json_structure'))
+          setErrorKey('invalid_json_structure')
           return
         }
         onSubmit(parsed)
       } catch {
-        setError(t('invalid_json'))
+        setErrorKey('invalid_json')
       }
     }
     reader.readAsText(file)
@@ -52,9 +52,9 @@ export function JsonFileUpload({ onSubmit }: Props) {
       <Button variant="outlined" onClick={() => inputRef.current?.click()}>
         {fileName ?? t('upload_label')}
       </Button>
-      {error && (
+      {errorKey && (
         <Alert severity="error" sx={{ mt: 1 }}>
-          {error}
+          {t(errorKey)}
         </Alert>
       )}
     </div>

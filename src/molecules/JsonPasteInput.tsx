@@ -13,19 +13,19 @@ type Props = {
 export function JsonPasteInput({ onSubmit }: Props) {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [errorKey, setErrorKey] = useState<string | null>(null)
 
   function handleSubmit() {
-    setError(null)
+    setErrorKey(null)
     try {
       const parsed: unknown = JSON.parse(value)
       if (!isTreeNode(parsed)) {
-        setError(t('invalid_json_structure'))
+        setErrorKey('invalid_json_structure')
         return
       }
       onSubmit(parsed)
     } catch {
-      setError(t('invalid_json'))
+      setErrorKey('invalid_json')
     }
   }
 
@@ -39,9 +39,9 @@ export function JsonPasteInput({ onSubmit }: Props) {
         onChange={(e) => setValue(e.target.value)}
         placeholder='{ "name": "root", "type": "folder", "children": [] }'
       />
-      {error && (
+      {errorKey && (
         <Alert severity="error" sx={{ mt: 1 }}>
-          {error}
+          {t(errorKey)}
         </Alert>
       )}
       <Button variant="contained" sx={{ mt: 2 }} onClick={handleSubmit} disabled={!value.trim()}>
